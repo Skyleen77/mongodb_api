@@ -37,6 +37,35 @@ const Group = class Group {
     })
   }
 
+  update() {
+    this.app.put('/group/:id', (req, res) => {
+      try {
+        if(!req.params.id) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        this.GroupModel.updateOne({ _id: req.params.id }, { $set: req.body }).then((group) => {
+          res.status(200).json(group || {});
+        }).catch((err) => {
+          res.status(400).json({
+            status: 400,
+            message: err
+          });
+        });
+      } catch (err) {
+        res.status(400).json({
+          status: 400,
+          message: err
+        });
+      }
+    })
+  }
+
   create() {
     this.app.post('/group/', (req, res) => {
       try {
@@ -59,9 +88,74 @@ const Group = class Group {
     })
   }
 
+  delete() {
+    this.app.delete('/group/:id', (req, res) => {
+      try {
+        if(!req.params.id) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        this.GroupModel.deleteOne({ _id: req.params.id }).then((group) => {
+          res.status(200).json(group || {});
+        }).catch((err) => {
+          res.status(400).json({
+            status: 400,
+            message: err
+          });
+        });
+      } catch (err) {
+        res.status(400).json({
+          status: 400,
+          message: err
+        });
+      }
+    })
+  }
+
+  setMember() {
+    this.app.post('/group/member/:id', (req, res) => {
+      try {
+        if(!req.params.id) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        this.GroupModel.updateMany({ _id: req.params.id }, {
+          $push: {
+            members: req.body.members
+          }
+        }, { upsert: true }).then((group) => {
+          res.status(200).json(group || {});
+        }).catch((err) => {
+          res.status(400).json({
+            status: 400,
+            message: err
+          });
+        });
+      } catch (err) {
+        res.status(400).json({
+          status: 400,
+          message: err
+        });
+      }
+    })
+  }
+
   run() {
     this.get();
     this.create();
+    this.update();
+    this.delete();
+    this.setMember();
   }
 }
 
