@@ -655,7 +655,7 @@ Body example :
     "name": "VIP",
     "montant": 35,
     "quantity": 10,
-    "extern_user": "6290d9e743550e139005b81f"
+    "extern_user": ["6290d9e743550e139005b81f"]
 }
 ```
 

@@ -13,11 +13,14 @@ const Schema = new mongoose.Schema({
     type: Number,
     required: [true, 'Quantity is required']
   },
-  extern_user: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'Quantity is required']
-  },
+  extern_user: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      unique: true,
+      required: [true, 'Quantity is required']
+    }
+  ]
 }, {
   collection: 'types_billets',
   minimize: true,
