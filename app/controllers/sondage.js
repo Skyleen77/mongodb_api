@@ -37,6 +37,35 @@ const Sondage = class Sondage {
     })
   }
 
+  update() {
+    this.app.put('/sondage/:id', (req, res) => {
+      try {
+        if(!req.params.id) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        this.SondageModel.findOneAndUpdate({ _id: req.params.id }, { $set: req.body }).then((sondage) => {
+          res.status(200).json(sondage || {});
+        }).catch((err) => {
+          res.status(400).json({
+            status: 400,
+            message: err
+          });
+        });
+      } catch (err) {
+        res.status(400).json({
+          status: 400,
+          message: err
+        });
+      }
+    })
+  }
+
   create() {
     this.app.post('/sondage/', (req, res) => {
       try {
@@ -59,9 +88,86 @@ const Sondage = class Sondage {
     })
   }
 
+  delete() {
+    this.app.delete('/sondage/:id', (req, res) => {
+      try {
+        if(!req.params.id) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        this.SondageModel.deleteOne({ _id: req.params.id }).then((sondage) => {
+          res.status(200).json(sondage || {});
+        }).catch((err) => {
+          res.status(400).json({
+            status: 400,
+            message: err
+          });
+        });
+      } catch (err) {
+        res.status(400).json({
+          status: 400,
+          message: err
+        });
+      }
+    })
+  }
+
+  setAnswer() {
+    this.app.post('/sondage/question/:id/answer/:idQuestion', (req, res) => {
+      try {
+        if(!req.params.id) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        if(!req.params.idQuestion) {
+          res.status(400).json({
+            status: 400,
+            message: 'Please use an id in the query string parameters'
+          });
+
+          return;
+        }
+
+        this.SondageModel.findOneAndUpdate({ 
+          '_id': req.params.id, 
+          'questions._id': req.params.idQuestion 
+        }, {
+          $push: {
+            'questions.$.answers': req.body
+          }
+        }, { upsert: true }).then((sondage) => {
+          res.status(200).json(sondage || {});
+        }).catch((err) => {
+          res.status(400).json({
+            status: 400,
+            message: err
+          });
+        });
+      } catch (err) {
+        res.status(400).json({
+          status: 400,
+          message: err
+        });
+      }
+    })
+  }
+
   run() {
     this.get();
     this.create();
+    this.update();
+    this.delete();
+    this.setAnswer();
   }
 }
 

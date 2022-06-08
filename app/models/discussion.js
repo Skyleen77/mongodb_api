@@ -1,21 +1,5 @@
 import mongoose from 'mongoose';
 
-const commentSchema = new mongoose.Schema({
-  send_by: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'User is required']
-  },
-  comment: {
-    type: String,
-    required: [true, 'Comment is required']
-  },
-  date: {
-    type: Date,
-    default: Date.now()
-  }
-});
-
 const messageSchema = new mongoose.Schema({
   send_by: {
     type: mongoose.Types.ObjectId,
@@ -30,20 +14,19 @@ const messageSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  comments: [commentSchema]
 });
-
-
 
 const Schema = new mongoose.Schema({
   link: {
-    type: mongoose.Types.ObjectId,
-    required: [true, 'Link is required']
-  },
-  type_link: {
-    type: String,
-    enum: ['group', 'event'],
-    required: [true, 'Type of link is required']
+    id: {
+      type: mongoose.Types.ObjectId,
+      required: [true, 'Link is required']
+    },
+    type: {
+      type: String,
+      enum: ['group', 'event', 'message'],
+      required: [true, 'Type of link is required']
+    }
   },
   messages: [messageSchema]
 }, {

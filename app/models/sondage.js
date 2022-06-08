@@ -1,15 +1,23 @@
 import mongoose from 'mongoose';
 
+const answerSchema = new mongoose.Schema({
+  answer: {
+    type: String,
+    required: [true, 'Answer is required']
+  },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'User is required']
+  }
+});
+
 const questionSchema = new mongoose.Schema({
   question: {
     type: String,
     required: [true, 'Question is required']
   },
-  anwsers: [
-    {
-      type: String
-    }
-  ]
+  answers: [answerSchema]
 });
 
 const Schema = new mongoose.Schema({
@@ -18,13 +26,7 @@ const Schema = new mongoose.Schema({
     ref: 'Event',
     required: [true, 'Event is required']
   },
-  questions: [questionSchema],
-  user_answer: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'User'
-    }
-  ]
+  questions: [questionSchema]
 }, {
   collection: 'sondages',
   minimize: true,
