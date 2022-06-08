@@ -177,3 +177,20 @@ Request URL :
 ```
 http://localhost:3000/group/:id
 ```
+
+### Set Members [POST]
+
+Request URL :
+```
+http://localhost:3000/group/member/:id
+```
+
+Body example :
+```json
+{
+    "members": [
+        "629f1f0509fdac22e765aa74",
+        "6290d9e743550e139005b81f"
+    ]
+}
+```
