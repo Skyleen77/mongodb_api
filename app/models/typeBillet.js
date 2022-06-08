@@ -15,7 +15,8 @@ const Schema = new mongoose.Schema({
   },
   extern_user: {
     type: mongoose.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: [true, 'Quantity is required']
   },
 }, {
   collection: 'types_billets',
